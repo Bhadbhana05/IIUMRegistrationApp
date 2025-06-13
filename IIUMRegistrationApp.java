@@ -9,8 +9,6 @@ package com.mycompany.fxislit;
  * @author hana imani
  */
 
-
-
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -740,43 +738,133 @@ public class IIUMRegistrationApp extends Application {
 
     private VBox lecturerViewUI() {
         VBox vbox = new VBox(10);
-        vbox.setStyle("-fx-padding: 10;");
+    vbox.setStyle("-fx-padding: 10;");
 
-        Label title = new Label("Lecturer Dashboard");
-        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-        Label info = new Label("This section displays all available courses, regardless of assignment.");
+    Label title = new Label("Lecturer Dashboard");
+    title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+    Label info = new Label("This section displays all available courses, regardless of assignment.");
 
-        TextArea coursesList = new TextArea();
-        coursesList.setEditable(false);
-        coursesList.setPromptText("List of all courses available.");
+    TextArea coursesList = new TextArea();
+    coursesList.setEditable(false);
+    coursesList.setPromptText("List of all courses available.");
 
-        StringBuilder sb = new StringBuilder("All Available Courses (with assigned sections):\n");
-        for (Course c : courses) {
-            sb.append(c.getCourseCode()).append(" - ").append(c.getCourseName())
-              .append(" (").append(c.getCreditHours()).append(" CHR)");
-            if (c.getSection() != null && !c.getSection().isEmpty()) {
-                sb.append(" [Section: ").append(c.getSection()).append("]");
-                }
-            sb.append("\n");
+    StringBuilder sb = new StringBuilder("All Available Courses (with assigned sections):\n");
+    for (Course c : courses) {
+        sb.append(c.getCourseCode()).append(" - ").append(c.getCourseName())
+          .append(" (").append(c.getCreditHours()).append(" CHR)");
+        if (c.getSection() != null && !c.getSection().isEmpty()) {
+            sb.append(" [Section: ").append(c.getSection()).append("]");
         }
-        coursesList.setText(sb.toString());
+        sb.append("\n");
+    }
+    coursesList.setText(sb.toString());
 
-        Button refreshBtn = new Button("Refresh Course List");
-        refreshBtn.setOnAction(e -> {
-            StringBuilder refreshedSb = new StringBuilder("All Available Courses (with assigned sections):\n");
-            for (Course c : courses) {
-                refreshedSb.append(c.getCourseCode()).append(" - ").append(c.getCourseName())
-                          .append(" (").append(c.getCreditHours()).append(" CHR)");
-                if (c.getSection() != null && !c.getSection().isEmpty()) {
-                    refreshedSb.append(" [Section: ").append(c.getSection()).append("]");
-                }
-                refreshedSb.append("\n");
+    Button refreshBtn = new Button("Refresh Course List");
+    refreshBtn.setOnAction(e -> {
+        StringBuilder refreshedSb = new StringBuilder("All Available Courses (with assigned sections):\n");
+        for (Course c : courses) {
+            refreshedSb.append(c.getCourseCode()).append(" - ").append(c.getCourseName())
+                      .append(" (").append(c.getCreditHours()).append(" CHR)");
+            if (c.getSection() != null && !c.getSection().isEmpty()) {
+                refreshedSb.append(" [Section: ").append(c.getSection()).append("]");
             }
-            coursesList.setText(refreshedSb.toString());
-        });
+            refreshedSb.append("\n");
+        }
+        coursesList.setText(refreshedSb.toString());
+    });
 
-        vbox.getChildren().addAll(title, info, coursesList, refreshBtn);
-        return vbox;
+    // NEW FEATURES START HERE
+
+    // -- Edit Section --
+    Label editLabel = new Label("Edit Assigned Course Section");
+    editLabel.setStyle("-fx-font-weight: bold;");
+    TextField courseCodeToEdit = new TextField();
+    courseCodeToEdit.setPromptText("Course Code");
+    TextField newSectionField = new TextField();
+    newSectionField.setPromptText("New Section Name");
+    Button updateSectionBtn = new Button("Update Section");
+
+    // -- Remove Assigned Course --
+    Label removeLabel = new Label("Remove Assigned Course");
+    removeLabel.setStyle("-fx-font-weight: bold;");
+    TextField courseCodeToRemove = new TextField();
+    courseCodeToRemove.setPromptText("Course Code");
+    Button removeCourseBtn = new Button("Remove Course");
+
+    // -- Shared Output --
+    TextArea updateOutput = new TextArea();
+    updateOutput.setEditable(false);
+
+    updateSectionBtn.setOnAction(e -> {
+        String courseCode = courseCodeToEdit.getText();
+        String newSection = newSectionField.getText();
+        boolean updated = false;
+
+        for (Lecturer l : lect) {
+            for (Course c : l.getAssignedCourses()) {
+                if (c.getCourseCode().equals(courseCode)) {
+                    c.setSection(newSection);
+                    updateOutput.setText("Updated section for " + courseCode + " to " + newSection);
+                    updated = true;
+
+                    // Update section in global list
+                    for (Course gc : courses) {
+                        if (gc.getCourseCode().equals(courseCode)) {
+                            gc.setSection(newSection);
+                            break;
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if (!updated) {
+            updateOutput.setText("Course code not found in your assignments.");
+        }
+
+        courseCodeToEdit.clear();
+        newSectionField.clear();
+    });
+
+    removeCourseBtn.setOnAction(e -> {
+        String courseCode = courseCodeToRemove.getText();
+        boolean removed = false;
+
+        for (Lecturer l : lect) {
+            List<Course> assignedCourses = l.getAssignedCourses();
+            removed = assignedCourses.removeIf(c -> c.getCourseCode().equals(courseCode));
+            if (removed) {
+                updateOutput.setText("Removed assigned course: " + courseCode);
+                break;
+            }
+        }
+
+        if (!removed) {
+            updateOutput.setText("Course code not found in your assignments.");
+        }
+
+        courseCodeToRemove.clear();
+    });
+
+    // Add all components to the VBox
+    vbox.getChildren().addAll(
+        title,
+        info,
+        coursesList,
+        refreshBtn,
+        editLabel,
+        courseCodeToEdit,
+        newSectionField,
+        updateSectionBtn,
+        removeLabel,
+        courseCodeToRemove,
+        removeCourseBtn,
+        updateOutput
+    );
+
+    return vbox;
     }
 
     private VBox detailTab() {
@@ -905,3 +993,7 @@ public class IIUMRegistrationApp extends Application {
         return vbox;
     }
 }
+
+
+
+  
