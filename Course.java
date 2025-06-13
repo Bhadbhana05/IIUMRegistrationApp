@@ -1,14 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.fxislit;
-
-/**
- *
- * @author hana imani
- */
-
+package com.mycompany.iiumregistrationapp;
 
 import java.util.Objects;
 
@@ -103,4 +93,24 @@ public class Course implements Manageable {
     public int hashCode() {
         return Objects.hash(courseCode, section);
     }
+    
+    // Convert a Course object to a CSV line
+public String toCSV() {
+    return courseCode + "," + courseName + "," + courseChr + "," + (section != null ? section : "");
 }
+
+// Create a Course object from a CSV line
+public static Course fromCSV(String line) {
+    String[] parts = line.split(",", -1); // -1 keeps empty strings
+    if (parts.length >= 3) {
+        String code = parts[0];
+        String name = parts[1];
+        int chr = Integer.parseInt(parts[2]);
+        String section = (parts.length > 3 && !parts[3].isEmpty()) ? parts[3] : null;
+        return new Course(code, name, chr, section);
+    }
+    return null;
+}
+
+}
+

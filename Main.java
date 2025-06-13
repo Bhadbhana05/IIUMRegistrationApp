@@ -1,20 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.fxislit;
+package com.mycompany.iiumregistrationapp;
 
-/**
- *
- * @author hana imani
- */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class Main { 
     public static void main(String[] args) { 
         try {
             Student s1 = new Student("2420919", "Ali", "Ahmad", "0123456789"); 
             
             Course c1 = new Course("BICS1304", "OOP", 3, "S01"); 
-            Course c2 = new Course("BICS1304", "OOP", 3, "S02"); 
+            Course c2 = new Course("BICS1303", "Computer Networking", 3, "S02"); 
             
             s1.registerCourse(c1); 
             s1.viewCourse(); 
@@ -30,6 +26,55 @@ public class Main {
 
             Section sect = new Section("S01", "BICS1304", "Monday", "10AM", "ICT LAB 6"); 
             sect.displayInfo(); 
+            
+            // Try File I/O
+            
+            // Student
+            ArrayList<Student> studList = new ArrayList<>();
+            studList.add(new Student("2420910", "Alea", "Aina", "0123456789")); 
+            // Load from file
+            List<Student> students = FileHandler.loadStudentsFromFile("students.csv");
+
+            // Save after changes
+            FileHandler.saveStudentsToFile(students, "students.csv");
+            
+            // Course
+            ArrayList<Course> courseList = new ArrayList<>();
+            courseList.add(new Course("BICS1303", "Computer Networking", 3, "S02")); 
+            // Load from file
+            List<Course> courses = FileHandler.loadCoursesFromFile("courses.csv");
+
+            // Save after changes
+            FileHandler.saveCoursesToFile(courses, "courses.csv");           
+            
+            // Registration
+            ArrayList<Registration> regList = new ArrayList<>();
+            regList.add(new Registration("R001", "2420919", "BICS1304", "2025-06-13", "S01"));
+            regList.add(new Registration("R002", "2420919", "BICS1305", "2025-06-13", "S02"));
+
+            FileHandler.saveRegistrationsToFile(regList, "registrations.csv");
+
+            List<Registration> loaded = FileHandler.loadRegistrationsFromFile("registrations.csv");
+            for (Registration r : loaded) {
+                r.displayInfo();
+            }
+            
+            // Section
+            ArrayList<Section> sectList = new ArrayList<>();
+            sectList.add(new Section("S02", "BICS1303", "Monday", "10AM", "Cisco Lab")); 
+            List<Section> sections = FileHandler.loadSectionsFromFile("sections.csv");
+            
+            FileHandler.saveSectionsToFile(sections, "sections.csv");
+
+            
+            /**List<Assignation> assigns = FileHandler.loadAssignationsFromFile("assignations.csv");
+            for (Assignation a : loaded) {
+                a.displayInfo();
+            }
+            
+            
+            FileHandler.saveAssignationsToFile(assigns, "assignations.csv");*/
+
             
             System.out.println("\n--- Testing Exception Handling ---");
             
@@ -57,4 +102,5 @@ public class Main {
         }
     } 
 }
+
 

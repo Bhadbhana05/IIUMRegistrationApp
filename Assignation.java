@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.fxislit;
+package com.mycompany.iiumregistrationapp;
 
-/**
- *
- * @author hana imani
- */
 public class Assignation implements Manageable {
     private String assID;
     private String lectID;
@@ -84,6 +76,27 @@ public class Assignation implements Manageable {
             throw new RuntimeException("Failed to display assignation info: " + e.getMessage());
         }
     }
+    
+    public String toCSV() {
+    return assID + "," + lectID + "," + courseCode + "," + assDate + "," + assStatus + "," + (section != null ? section : "");
 }
 
+public static Assignation fromCSV(String line) {
+    String[] parts = line.split(",", -1); // -1 to include empty strings
+    if (parts.length >= 5) {
+        String assID = parts[0];
+        String lectID = parts[1];
+        String courseCode = parts[2];
+        String assDate = parts[3];
+        String assStatus = parts[4];
+        String section = (parts.length > 5 && !parts[5].isEmpty()) ? parts[5] : null;
+
+        Assignation assignation = new Assignation(assID, lectID, courseCode, assDate, section);
+        assignation.assStatus = assStatus; // override default status
+        return assignation;
+    }
+    return null;
+}
+
+}
 

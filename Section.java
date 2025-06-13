@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.fxislit;
+package com.mycompany.iiumregistrationapp;
 
-/**
- *
- * @author hana imani
- */
 public class Section implements Manageable { 
     private String sectNo; 
     private String courseCode; 
@@ -91,5 +83,19 @@ public class Section implements Manageable {
         } catch (Exception e) {
             throw new RuntimeException("Failed to display section info: " + e.getMessage());
         }
-    } 
+    }
+    
+    public String toCSV() {
+    return sectNo + "," + courseCode + "," + sectDay + "," + sectTime + "," + sectVenue;
 }
+
+    public static Section fromCSV(String line) {
+    String[] parts = line.split(",", -1); // include empty values
+    if (parts.length < 5) {
+        throw new IllegalArgumentException("Invalid CSV format for Section: " + line);
+    }
+    return new Section(parts[0], parts[1], parts[2], parts[3], parts[4]);
+}
+
+}
+

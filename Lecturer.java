@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.fxislit;
+package com.mycompany.iiumregistrationapp;
 
-/**
- *
- * @author hana imani
- */
 import java.util.ArrayList; 
 import java.util.List; 
 import java.util.Objects;
@@ -93,5 +85,24 @@ public class Lecturer extends Person {
         } catch (Exception e) {
             throw new RuntimeException("Failed to display lecturer info: " + e.getMessage());
         }
-    } 
+    }
+    
+    public String toCSV() {
+    return lectID + "," + firstName + "," + lastName + "," + phoneNo;
 }
+
+public static Lecturer fromCSV(String line) {
+    String[] parts = line.split(",", -1);
+    if (parts.length >= 4) {
+        String id = parts[0];
+        String fname = parts[1];
+        String lname = parts[2];
+        String phone = parts[3];
+        return new Lecturer(id, fname, lname, phone);
+    }
+    return null;
+}
+
+}
+
+

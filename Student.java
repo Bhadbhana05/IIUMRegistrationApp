@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.mycompany.fxislit;
+package com.mycompany.iiumregistrationapp;
 
-/**
- *
- * @author hana imani
- */
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -126,4 +118,53 @@ public class Student extends Person {
     public ArrayList<Course> getRegisteredCourses() { 
         return new ArrayList<>(registeredCourses);
     }
+    
+    public String toCSV() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(studID).append(",").append(firstName).append(",").append(lastName).append(",").append(phoneNo);
+    for (Course c : registeredCourses) {
+        sb.append(";").append(c.getCourseCode())
+          .append("|").append(c.getCourseName())
+          .append("|").append(c.getCreditHours())
+          .append("|").append(c.getSection() == null ? "" : c.getSection());
+    }
+    return sb.toString();
 }
+public static Student fromCSV(String line) {
+    try {
+        String[] parts = line.split(",", 4);
+        if (parts.length < 4) {
+            throw new IllegalArgumentException("Invalid student data: " + line);
+        }
+
+        Student student = new Student(parts[0], parts[1], parts[2], parts[3]);
+
+        // If course data exists, it's after the 4th comma
+        int courseDataIndex = line.indexOf(",", line.indexOf(",", line.indexOf(",", line.indexOf(",") + 1) + 1) + 1);
+        if (courseDataIndex != -1 && courseDataIndex + 1 < line.length()) {
+            String courseData = line.substring(courseDataIndex + 1);
+            String[] courseTokens = courseData.split(";");
+            for (String token : courseTokens) {
+                if (!token.isEmpty()) {
+                    String[] courseParts = token.split("\\|", -1);
+                    if (courseParts.length >= 3) {
+                        String courseCode = courseParts[0];
+                        String courseName = courseParts[1];
+                        int creditHours = Integer.parseInt(courseParts[2]);
+                        String section = (courseParts.length > 3) ? courseParts[3] : null;
+
+                        Course course = new Course(courseCode, courseName, creditHours, section);
+                        student.registerCourse(course);
+                    }
+                }
+            }
+        }
+
+        return student;
+    } catch (Exception e) {
+        throw new IllegalArgumentException("Error parsing student CSV: " + e.getMessage());
+    }
+}
+
+}
+
