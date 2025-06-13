@@ -201,6 +201,37 @@ public static List<Section> loadSectionsFromFile(String filename) {
     return sections;
 }
 
+// Save list of lecturers to a CSV file
+public static void saveLecturersToFile(List<Lecturer> lecturers, String filename) {
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+        for (Lecturer lecturer : lecturers) {
+            writer.write(lecturer.toCSV());
+            writer.newLine();
+        }
+        System.out.println("Lecturers saved to " + filename);
+    } catch (IOException e) {
+        System.err.println("Error saving lecturers: " + e.getMessage());
+    }
+}
+
+// Load list of lecturers from a CSV file
+public static List<Lecturer> loadLecturersFromFile(String filename) {
+    List<Lecturer> lecturers = new ArrayList<>();
+    try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Lecturer lecturer = Lecturer.fromCSV(line);
+            if (lecturer != null) {
+                lecturers.add(lecturer);
+            }
+        }
+        System.out.println("Lecturers loaded from " + filename);
+    } catch (IOException e) {
+        System.err.println("Error loading lecturers: " + e.getMessage());
+    }
+    return lecturers;
+}
+
 
 }
 

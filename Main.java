@@ -32,48 +32,62 @@ public class Main {
             // Student
             ArrayList<Student> studList = new ArrayList<>();
             studList.add(new Student("2420910", "Alea", "Aina", "0123456789")); 
-            // Load from file
             List<Student> students = FileHandler.loadStudentsFromFile("students.csv");
-
-            // Save after changes
             FileHandler.saveStudentsToFile(students, "students.csv");
+            List<Student> lo1 = FileHandler.loadStudentsFromFile("students.csv");
+            for (Student s : lo1) {
+                s.displayInfo();
+            }
             
             // Course
             ArrayList<Course> courseList = new ArrayList<>();
             courseList.add(new Course("BICS1303", "Computer Networking", 3, "S02")); 
-            // Load from file
             List<Course> courses = FileHandler.loadCoursesFromFile("courses.csv");
-
-            // Save after changes
-            FileHandler.saveCoursesToFile(courses, "courses.csv");           
+            FileHandler.saveCoursesToFile(courses, "courses.csv");  
+            List<Course> lo2 = FileHandler.loadCoursesFromFile("courses.csv");
+            for (Course c : lo2) {
+                c.displayInfo();
+            }
+            
+            // Lecturer
+            ArrayList<Lecturer> lectList = new ArrayList<>();
+            lectList.add(new Lecturer("10657", "Dr.", "Anwar", "0119873456")); 
+            List<Lecturer> lect = FileHandler.loadLecturersFromFile("lecturers.csv"); 
+            FileHandler.saveLecturersToFile(lect, "lecturers.csv");
+            List<Lecturer> lo3 = FileHandler.loadLecturersFromFile("lecturers.csv");
+            for (Lecturer l : lo3) {
+                l.displayInfo();
+            }
             
             // Registration
             ArrayList<Registration> regList = new ArrayList<>();
             regList.add(new Registration("R001", "2420919", "BICS1304", "2025-06-13", "S01"));
             regList.add(new Registration("R002", "2420919", "BICS1305", "2025-06-13", "S02"));
-
             FileHandler.saveRegistrationsToFile(regList, "registrations.csv");
-
-            List<Registration> loaded = FileHandler.loadRegistrationsFromFile("registrations.csv");
-            for (Registration r : loaded) {
+            List<Registration> lo4 = FileHandler.loadRegistrationsFromFile("registrations.csv");
+            for (Registration r : lo4) {
                 r.displayInfo();
             }
             
             // Section
             ArrayList<Section> sectList = new ArrayList<>();
-            sectList.add(new Section("S02", "BICS1303", "Monday", "10AM", "Cisco Lab")); 
-            List<Section> sections = FileHandler.loadSectionsFromFile("sections.csv");
+            sectList.add(new Section("S02", "BICS1303", "Monday", "10AM", "Cisco Lab"));            
+            FileHandler.saveSectionsToFile(sectList, "sections.csv");
+            List<Section> sections = FileHandler.loadSectionsFromFile("sections.csv"); 
+            List<Section> lo5 = FileHandler.loadSectionsFromFile("sections.csv");
+            for (Section s : lo5) {
+                s.displayInfo();
+            }            
             
-            FileHandler.saveSectionsToFile(sections, "sections.csv");
-
-            
-            /**List<Assignation> assigns = FileHandler.loadAssignationsFromFile("assignations.csv");
-            for (Assignation a : loaded) {
+            // Assignation
+            ArrayList<Assignation> assList = new ArrayList<>();
+            assList.add(new Assignation("A001", "10657", "BICS1303", "2025-06-13")); 
+            List<Assignation> ass = FileHandler.loadAssignationsFromFile("assignations.csv");            
+            FileHandler.saveAssignationsToFile(ass, "assignations.csv");            
+            List<Assignation> lo6 = FileHandler.loadAssignationsFromFile("assignations.csv");
+            for (Assignation a : lo6) {
                 a.displayInfo();
-            }
-            
-            
-            FileHandler.saveAssignationsToFile(assigns, "assignations.csv");*/
+            }            
 
             
             System.out.println("\n--- Testing Exception Handling ---");
